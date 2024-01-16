@@ -1,15 +1,33 @@
 name: Build, test and deploy
 on: push
 jobs:
-  build-test-deploy-job:
+  hello:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v3
+      - name: checkout repo
+      - uses: actions/checkout@v3
       - run: echo "$(cat hello_world.txt)"
-      - name: Setup Node.js environment
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+      - name: setup node.js
         uses: actions/setup-node@v4.0.1
         with:
           node-version: '18.x'
       - run: npm install
-      - run: npm run build
+      - run: npm run build 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+      - run: echo "$(cat hello_world.txt)"
+      - name: setup node.js
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version: '18.x'
+      - run: npm install
+      - run: npm run test
